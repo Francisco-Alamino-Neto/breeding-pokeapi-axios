@@ -4,8 +4,9 @@ import {
   View,
   Text,
   Image,
-  StyleSheet,
 } from 'react-native';
+
+import { styles } from '../../styles/pokemonPreview';
 
 export default function PokemonPreview({ pokemon }) {
   const [pokemonData, setPokemonData] = useState(null);
@@ -47,23 +48,3 @@ export default function PokemonPreview({ pokemon }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-  },
-
-  image: {
-    width: 180,
-    height: 180,
-  },
-
-  number: {
-    fontSize: 20,
-  },
-
-  name: {
-    fontSize: 24,
-    textTransform: 'capitalize',
-  },
-});

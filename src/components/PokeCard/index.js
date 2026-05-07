@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity } from "react-native";
 
-import { typeIcons } from '../../utils/typeIcons';
+import { typeIcons } from "../../utils/typeIcons";
 
-export default function PokeCard({ pokemon, onPress }) {
+import { styles } from "../../styles/pokeCard";
+
+export default function PokeCard({ pokemon, onPress, isSelected }) {
   const [pokemonData, setPokemonData] = useState(null);
 
   useEffect(() => {
@@ -26,23 +22,17 @@ export default function PokeCard({ pokemon, onPress }) {
   }, [pokemon.url]);
 
   if (!pokemonData) {
-    return (
-      <Text>Carregando...</Text>
-    );
+    return <Text>Carregando...</Text>;
   }
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={[styles.card, isSelected && styles.selectedCard]}
       onPress={onPress}
     >
-      <Text style={styles.number}>
-        #{pokemonData.id}
-      </Text>
+      <Text style={styles.number}>#{pokemonData.id}</Text>
 
-      <Text style={styles.name}>
-        {pokemonData.name}
-      </Text>
+      <Text style={styles.name}>{pokemonData.name}</Text>
 
       <View style={styles.typesContainer}>
         {pokemonData.types.map((item) => (
@@ -56,33 +46,3 @@ export default function PokeCard({ pokemon, onPress }) {
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-
-    padding: 10,
-  },
-
-  number: {
-    fontSize: 16,
-  },
-
-  name: {
-    fontSize: 18,
-    textTransform: 'capitalize',
-  },
-
-  typesContainer: {
-    flexDirection: 'row',
-    marginLeft: 'auto',
-    gap: 5,
-  },
-
-  typeIcon: {
-    width: 20,
-    height: 20,
-  },
-});
