@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+
 import {
   View,
-  Text,
   FlatList,
   StyleSheet,
   ActivityIndicator,
-} from "react-native";
-import api from "../services/api";
-import FilterBar from "../components/FilterBar";
-import PokeCard from "../components/PokeCard";
-import PokemonPreview from "../components/PokemonPreview";
+} from 'react-native';
+
+import api from '../services/api';
+
+import PokeCard from '../components/PokeCard';
+import PokemonPreview from '../components/PokemonPreview';
+import FilterBar from '../components/FilterBar';
 
 export default function Home() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -19,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     async function loadPokemon() {
       try {
-        const response = await api.get("/pokemon?limit=1025");
+        const response = await api.get('/pokemon?limit=151');
 
         setPokemonList(response.data.results);
 
@@ -35,26 +37,36 @@ export default function Home() {
   }, []);
 
   if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <ActivityIndicator size="large" />;
   }
 
   return (
     <View style={styles.container}>
+
       <FilterBar />
 
-      <PokemonPreview pokemon={selectedPokemon} />
+      <View style={styles.content}>
 
-      <FlatList
-        data={pokemonList}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <PokeCard pokemon={item} onPress={() => setSelectedPokemon(item)} />
-        )}
-      />
+        <View style={styles.leftContainer}>
+          <PokemonPreview pokemon={selectedPokemon} />
+        </View>
+
+        <View style={styles.rightContainer}>
+          <FlatList
+            data={pokemonList}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) => (
+              <PokeCard
+                pokemon={item}
+                onPress={() => setSelectedPokemon(item)}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+
+      </View>
+
     </View>
   );
 }
@@ -62,18 +74,26 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: '#C6C6C6',
   },
 
-  center: {
+  content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
   },
 
-  name: {
-    fontSize: 22,
-    marginBottom: 10,
-    textTransform: "capitalize",
+  leftContainer: {
+    width: '40%',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    padding: 10,
+  },
+
+  rightContainer: {
+    width: '60%',
+
+    paddingRight: 10,
   },
 });
