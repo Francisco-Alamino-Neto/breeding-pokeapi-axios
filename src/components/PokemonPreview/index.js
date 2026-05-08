@@ -1,48 +1,33 @@
-import { useEffect, useState } from 'react';
-
 import {
   View,
   Text,
   Image,
-} from 'react-native';
+} from "react-native";
 
-import { styles } from '../../styles/pokemonPreview';
+import { styles } from "../../styles/pokemonPreview";
 
-export default function PokemonPreview({ pokemon }) {
-  const [pokemonData, setPokemonData] = useState(null);
+export default function PokemonPreview({
+  pokemon,
+}) {
 
-  useEffect(() => {
-    async function loadData() {
-      if (!pokemon) return;
-
-      const response = await fetch(pokemon.url);
-
-      const data = await response.json();
-
-      setPokemonData(data);
-    }
-
-    loadData();
-  }, [pokemon]);
-
-  if (!pokemonData) return null;
+  if (!pokemon) return null;
 
   return (
     <View style={styles.container}>
 
       <Image
         source={{
-          uri: pokemonData.sprites.front_default,
+          uri: pokemon.sprite,
         }}
         style={styles.image}
       />
 
       <Text style={styles.number}>
-        #{pokemonData.id}
+        #{pokemon.id}
       </Text>
 
       <Text style={styles.name}>
-        {pokemonData.name}
+        {pokemon.name}
       </Text>
 
     </View>
