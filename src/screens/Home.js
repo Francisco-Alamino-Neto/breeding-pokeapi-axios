@@ -15,53 +15,85 @@ export default function Home() {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [eggGroupCache, setEggGroupCache] = useState({});
+  const [filteredPokemon, setFilteredPokemon] = useState([]);
 
-  const filteredPokemon = pokemonList.filter((pokemon) => {
-    const normalizedSearch = search.toLowerCase().trim();
+  async function getEggGroups(pokemon) {
+    if (eggGroupCache[pokemon.name]) {
+      return eggGroupCache[pokemon.name];
+    }
 
-    if (!normalizedSearch) return true;
+    try {
+      const response = await fetch(pokemon.url);
 
-    const matchesName = pokemon.name.toLowerCase().includes(normalizedSearch);
+      const data = await response.json();
 
-    const matchesNumber = String(pokemon.id).includes(normalizedSearch);
+      const speciesResponse = await fetch(data.species.url);
 
-    const matchesEggGroup = pokemon.eggGroups.some(
-      (group) => group.toLowerCase().trim() === normalizedSearch,
-    );
+      const species = await speciesResponse.json();
 
-    return matchesName || matchesNumber || matchesEggGroup;
-  });
+      const groups = species.egg_groups.map((group) => group.name);
+
+      setEggGroupCache((prev) => ({
+        ...prev,
+        [pokemon.name]: groups,
+      }));
+
+      return groups;
+    } catch (error) {
+      console.log(error);
+
+      return [];
+    }
+  }
+
+  useEffect(() => {
+
+  async function filterPokemon() {
+
+    const searchLower =
+      search.toLowerCase();
+
+    const filtered = [];
+
+    for (const pokemon of pokemonList) {
+
+      const matchesName =
+        pokemon.name.includes(
+          searchLower
+        );
+
+      if (matchesName) {
+        filtered.push(pokemon);
+        continue;
+      }
+
+      const eggGroups =
+        await getEggGroups(pokemon);
+
+      const matchesEggGroup =
+        eggGroups.includes(searchLower);
+
+      if (matchesEggGroup) {
+        filtered.push(pokemon);
+      }
+    }
+
+    setFilteredPokemon(filtered);
+  }
+
+  filterPokemon();
+
+}, [search, pokemonList]);
 
   useEffect(() => {
     async function loadPokemon() {
       try {
         const response = await api.get("/pokemon?limit=1300");
 
-        const pokemonData = await Promise.all(
-          response.data.results.map(async (pokemon) => {
-            const pokemonResponse = await fetch(pokemon.url);
-            const pokemonDetails = await pokemonResponse.json();
+        setPokemonList(response.data.results);
 
-            const speciesResponse = await fetch(pokemonDetails.species.url);
-
-            const speciesData = await speciesResponse.json();
-            
-            console.log(pokemonDetails.name, speciesData.egg_groups);
-            
-            return {
-              id: pokemonDetails.id,
-              name: pokemonDetails.name,
-              sprite: pokemonDetails.sprites.front_default,
-              types: pokemonDetails.types,
-
-              eggGroups: speciesData.egg_groups.map((group) => group.name),
-            };
-          }),
-        );
-
-        setPokemonList(pokemonData);
-
-        setSelectedPokemon(pokemonData[0]);
+        setSelectedPokemon(response.data.results[0]);
       } catch (error) {
         console.log(error);
       } finally {

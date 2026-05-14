@@ -1,9 +1,13 @@
-import { StyleSheet } from 'react-native';
-import { colors } from './colors';
+import { StyleSheet } from "react-native";
+import { colors } from "./colors";
 
 export const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    flex: 1,
+  },
+
+  contentContainer: {
+    alignItems: "center",
   },
 
   image: {
@@ -17,6 +21,6 @@ export const styles = StyleSheet.create({
 
   name: {
     fontSize: 24,
-    textTransform: 'capitalize',
+    textTransform: "capitalize",
   },
 });
