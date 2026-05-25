@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  Image,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -88,57 +89,61 @@ const eggGroups = [
   },
 ];
 
-export default function SearchBar({
-  search,
-  setSearch,
-}) {
-  const [showFilters, setShowFilters] =
-    useState(false);
+const flags = {
+  br: require('../../assets/flags/br-flag.png'),
+  uk: require('../../assets/flags/uk-flag.png'),
+};
 
+export default function SearchBar({ search, setSearch }) {
+  const [showFilters, setShowFilters] = useState(false);
+  const [showLanguages, setShowLanguages] = useState(false);
+  const [language, setLanguage] = useState('br');
+  
   return (
     <View style={styles.container}>
 
-      <View style={styles.searchContainer}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.title}>Pokedex</Text>
 
-        <TextInput
-          placeholder="Nome, número ou egg group..."
-          value={search}
-          onChangeText={setSearch}
-          style={styles.input}
-        />
-
-        <TouchableOpacity
-          onPress={() =>
-            setShowFilters(!showFilters)
-          }
-        >
-          <Ionicons
-            name="filter"
-            size={24}
-            color="black"
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Nome, número ou egg group..."
+            value={search}
+            onChangeText={setSearch}
+            style={styles.input}
           />
+        </View>
+
+        <TouchableOpacity onPress={() => setShowLanguages(!showLanguages)}>
+          <Image source={flags[language]} style={styles.flagIcon} />
         </TouchableOpacity>
+
+        {showLanguages && (
+          <View style={styles.languageDropdown}>
+            <TouchableOpacity onPress={() => setLanguage('br')}>
+              <Image source={flags.br} style={styles.flagIcon} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setLanguage('uk')}>
+              <Image source={flags.uk} style={styles.flagIcon} />
+            </TouchableOpacity>
+          </View>
+        )}
 
       </View>
 
       {showFilters && (
         <View style={styles.filtersContainer}>
-
           {eggGroups.map((group) => (
             <TouchableOpacity
               key={group.value}
               style={styles.filterButton}
               onPress={() => setSearch(group.value)}
             >
-              <Text style={styles.filterText}>
-                {group.label}
-              </Text>
+              <Text style={styles.filterText}>{group.label}</Text>
             </TouchableOpacity>
           ))}
-
         </View>
       )}
-
     </View>
   );
 }
