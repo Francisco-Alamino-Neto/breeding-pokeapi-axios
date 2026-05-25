@@ -79,34 +79,44 @@ export default function PokemonPreview({ pokemon }) {
 
   return (
     <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-    >
-      <Image
-        source={{
-          uri: pokemonData.sprites.front_default,
-        }}
-        style={styles.image}
-      />
-
-      <Text style={styles.number}>#{pokemonData.id}</Text>
-
-      <Text style={styles.name}>{pokemonData.name}</Text>
-
+  style={styles.container}
+  contentContainerStyle={styles.contentContainer}
+  >
+    <Image
+    source={{
+      uri: pokemonData.sprites.front_default,
+    }}
+    style={styles.image}
+    />
+    
+    <Text style={styles.number}>#{pokemonData.id}</Text>
+    
+    <Text style={styles.name}>{pokemonData.name}</Text>
+    
+    <View style={styles.infoContainer}>
       <Text style={styles.info}>
         Egg Groups:{" "}
         {speciesData.egg_groups.map((group) => group.name).join(", ")}
       </Text>
-
+      
       <Text style={styles.info}>
         Gender: {getGenderRate(speciesData.gender_rate)}
       </Text>
-
-      <Text style={styles.info}>Height: {pokemonData.height / 10}m</Text>
-
-      <Text style={styles.info}>Weight: {pokemonData.weight / 10}kg</Text>
-
-      <Text style={styles.description}>{englishEntry?.flavor_text}</Text>
-    </ScrollView>
+      
+      <Text style={styles.info}>
+        Height: {pokemonData.height / 10}m
+      </Text>
+      
+      <Text style={styles.info}>
+        Weight: {pokemonData.weight / 10}kg
+      </Text>
+    </View>
+    
+    <Text style={styles.description}>
+      {englishEntry?.flavor_text
+      .replace(/\f/g, " ")
+      .replace(/\n/g, " ")}
+    </Text>
+  </ScrollView>
   );
 }
