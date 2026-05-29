@@ -97,40 +97,81 @@ const flags = {
 export default function SearchBar({ search, setSearch }) {
   const [showFilters, setShowFilters] = useState(false);
   const [showLanguages, setShowLanguages] = useState(false);
-  const [language, setLanguage] = useState('br');
-  
+  const [language, setLanguage] = useState("br");
+
   return (
     <View style={styles.container}>
-
       <View style={styles.headerContainer}>
-        <Text style={styles.title}>Pokedex</Text>
 
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Nome, número ou egg group..."
-            value={search}
-            onChangeText={setSearch}
-            style={styles.input}
-          />
+        {/* ESQUERDA */}
+        <View style={styles.leftSection}>
+          <Text style={styles.title}>Pokedex</Text>
         </View>
 
-        <TouchableOpacity onPress={() => setShowLanguages(!showLanguages)}>
-          <Image source={flags[language]} style={styles.flagIcon} />
-        </TouchableOpacity>
-
-        {showLanguages && (
-          <View style={styles.languageDropdown}>
-            <TouchableOpacity onPress={() => setLanguage('br')}>
-              <Image source={flags.br} style={styles.flagIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setLanguage('uk')}>
-              <Image source={flags.uk} style={styles.flagIcon} />
-            </TouchableOpacity>
+        {/* CENTRO */}
+        <View style={styles.centerSection}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              placeholder="Nome, número ou egg group..."
+              value={search}
+              onChangeText={setSearch}
+              style={styles.input}
+            />
           </View>
-        )}
+        </View>
 
+        {/* DIREITA */}
+        <View style={styles.rightSection}>
+
+          {/* FILTRO BUTTON */}
+          <TouchableOpacity
+            onPress={() => setShowFilters(!showFilters)}
+          >
+            <Text style={styles.filterIcon}>⚙️</Text>
+          </TouchableOpacity>
+
+          {/*IDIOMA BUTTON */}
+          <TouchableOpacity
+            onPress={() => setShowLanguages(!showLanguages)}
+          >
+            <Image
+              source={flags[language]}
+              style={styles.flagIcon}
+            />
+          </TouchableOpacity>
+
+          {/* IDIOMA DROPDOWN */}
+          {showLanguages && (
+            <View style={styles.languageDropdown}>
+              <TouchableOpacity
+                onPress={() => {
+                  setLanguage("br");
+                  setShowLanguages(false);
+                }}
+              >
+                <Image
+                  source={flags.br}
+                  style={styles.flagIcon}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  setLanguage("uk");
+                  setShowLanguages(false);
+                }}
+              >
+                <Image
+                  source={flags.uk}
+                  style={styles.flagIcon}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
 
+      {/* FILTROS */}
       {showFilters && (
         <View style={styles.filtersContainer}>
           {eggGroups.map((group) => (
@@ -139,7 +180,9 @@ export default function SearchBar({ search, setSearch }) {
               style={styles.filterButton}
               onPress={() => setSearch(group.value)}
             >
-              <Text style={styles.filterText}>{group.label}</Text>
+              <Text style={styles.filterText}>
+                {group.label}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>

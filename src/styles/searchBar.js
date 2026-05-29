@@ -11,7 +11,26 @@ export const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+
+  leftSection: {
+    flex: 1,
+  },
+
+  centerSection: {
+    flex: 2,
+    alignItems: "center",
+  },
+
+  rightSection: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+
+    gap: 10,
   },
 
   title: {
@@ -21,6 +40,7 @@ export const styles = StyleSheet.create({
   },
 
   searchContainer: {
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -36,9 +56,9 @@ export const styles = StyleSheet.create({
 
   input: {
     backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    height: 35,
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    height: 45,
     flex: 1,
   },
 
@@ -50,12 +70,15 @@ export const styles = StyleSheet.create({
 
   languageDropdown: {
     position: 'absolute',
+    top: 50,
+    right: 0,
+    borderRadius: 10,
+    padding: 10,
+    gap: 10,
+    elevation: 5,
     right: 10,
     top: 45,
     backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 5,
-    elevation: 3,
   },
 
   filtersContainer: {
